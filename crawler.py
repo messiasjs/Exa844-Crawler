@@ -20,7 +20,7 @@ isbn = ""
 categoria = ""
 num_paginas = ""
 
-url = "https://www.publishnews.com.br/ranking/semanal/0/"
+url = "https://www.publishnews.com.br/ranking/mensal/0/"
 year =2022
 month =1
 while year <= 2022:
@@ -32,6 +32,17 @@ while year <= 2022:
         soup = BeautifulSoup(html, 'lxml')
 
         for book in soup.find_all('div', class_='pn-ranking-livros-posicao'):
+
+            posicao = ""
+            nome = ""
+            volume = ""
+            autor = ""
+            editora = ""
+            resumo = ""
+            isbn = ""
+            categoria = ""
+            num_paginas = ""
+
             if book:
                 posicao = book.find("div",  class_="pn-ranking-livros-posicao-numero")
                 nome = book.find("div",  class_="pn-ranking-livro-nome")
@@ -43,21 +54,9 @@ while year <= 2022:
                 categoria = book.find("div",  class_="pn-ranking-livro-categoria")
                 num_paginas = book.find("div",  class_="pn-ranking-livro-paginas")
 
-                """
-                print("--------------------", posicao)
-                print("--------------------", nome)
-                print("--------------------", volume)
-                print("--------------------", autor)
-                print("--------------------", editora)
-                print("--------------------", resumo)
-                print("--------------------", isbn)
-                print("--------------------", categoria)
-                print("--------------------", num_pages)
-                """
-
 
                 livro =dict()
-                livro["nome"] = nome.txt
+                livro["nome"] = nome.text
                 livro["autor"] = autor.text
                 livro["editora"] = editora.text
                 if resumo:
@@ -81,11 +80,10 @@ while year <= 2022:
         livros_mes["mes_ano"] = str(month)+"/"+str(year)
         livros_mes["livros"] = livros
         livros_meses.append(livros_mes)
-        #livros.clear()
+        livros = []
     year+=1
 
 publish_news["livros_por_mes"] = livros_meses
-print(publish_news)
 jsonStr = json.dumps(publish_news, indent=4, ensure_ascii=False) 
-with open("publish.json", "w") as outfile:
+with open("publish.json", "w", encoding='utf-8') as outfile:
   outfile.write(jsonStr)
